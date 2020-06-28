@@ -1,4 +1,5 @@
-## Copy this file to config.mk and modify to get you personal build configuration
+# Make Config
+PLATFORM=CF2
 
 ## Force device type string
 # CFLAGS += -DDEVICE_TYPE_STRING_FORCE="CF20"
@@ -87,4 +88,4 @@
 # FATFS_DISKIO_TESTS  = 1	# Set to 1 to enable FatFS diskio function tests. Erases card.
 
 ## To build with lighthouse support
-# CFLAGS += -DDISABLE_LIGHTHOUSE_DRIVER=0
+CFLAGS += -DDISABLE_LIGHTHOUSE_DRIVER=0
