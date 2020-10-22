@@ -57,6 +57,8 @@ static bool isInit;
 static bool emergencyStop = false;
 static int emergencyStopTimeout = EMERGENCY_STOP_TIMEOUT_DISABLED;
 
+static bool checkStops;
+
 #define PROPTEST_NBR_OF_VARIANCE_VALUES   100
 static bool startPropTest = false;
 
@@ -80,6 +82,7 @@ typedef enum { configureAcc, measureNoiseFloor, measureProp, testBattery, restar
 
 static STATS_CNT_RATE_DEFINE(stabilizerRate, 500);
 static rateSupervisor_t rateSupervisorContext;
+static bool rateWarningDisplayed = false;
 
 static struct {
   // position - mm
@@ -287,7 +290,8 @@ static void stabilizerTask(void* param)
 
       checkEmergencyStopTimeout();
 
-      if (emergencyStop) {
+      checkStops = systemIsArmed();
+      if (emergencyStop || (systemIsArmed() == false)) {
         powerStop();
       } else {
         powerDistribution(&control);
@@ -305,7 +309,10 @@ static void stabilizerTask(void* param)
     STATS_CNT_RATE_EVENT(&stabilizerRate);
 
     if (!rateSupervisorValidate(&rateSupervisorContext, xTaskGetTickCount())) {
-      DEBUG_PRINT("WARNING: stabilizer loop rate is off (%lu)\n", rateSupervisorLatestCount(&rateSupervisorContext));
+      if (!rateWarningDisplayed) {
+        DEBUG_PRINT("WARNING: stabilizer loop rate is off (%lu)\n", rateSupervisorLatestCount(&rateSupervisorContext));
+        rateWarningDisplayed = true;
+      }
     }
   }
 }
@@ -554,6 +561,7 @@ LOG_ADD(LOG_FLOAT, motorVarXM4, &accVarX[3])
 LOG_ADD(LOG_FLOAT, motorVarYM4, &accVarY[3])
 LOG_ADD(LOG_UINT8, motorPass, &motorPass)
 LOG_ADD(LOG_UINT16, motorTestCount, &motorTestCount)
+LOG_ADD(LOG_UINT8, checkStops, &checkStops)
 LOG_GROUP_STOP(health)
 
 LOG_GROUP_START(ctrltarget)

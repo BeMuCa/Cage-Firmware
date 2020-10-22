@@ -7,7 +7,7 @@
  *
  * Crazyflie control firmware
  *
- * Copyright (C) 2019 - 2020 Bitcraze AB
+ * Copyright (C) 2020 Bitcraze AB
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,29 +21,39 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
+ *
+ * api_app.c - App layer application that ilustrates how to use functions in the API.
+ *             This app may not be possible to run, the intention is to show how to
+ *             use functions.
  */
 
-#pragma once
 
-#define SPEED_OF_LIGHT (299792458.0)
-#define GRAVITY_MAGNITUDE (9.81f)
+#include <string.h>
+#include <stdint.h>
+#include <stdbool.h>
 
-#ifndef M_PI
-  #define M_PI   3.14159265358979323846
-#endif
+#include "app.h"
 
-#ifndef M_PI_F
-  #define M_PI_F   (3.14159265358979323846f)
-#endif
+#include "FreeRTOS.h"
+#include "task.h"
 
-#ifndef M_1_PI_F
-  #define M_1_PI_F (0.31830988618379067154f)
-#endif
+#include "debug.h"
 
-#ifndef M_PI_2_F
-  #define M_PI_2_F (1.57079632679f)
-#endif
+// Examples
+#include "app_ledseq.h"
+#include "app_high_level_commander.h"
+#include "app_lighthouse.h"
 
-#ifndef CF_MASS
-  #define CF_MASS (27.0f)
-#endif
+#define DEBUG_MODULE "APPAPI"
+
+void appMain() {
+  appRegisterLedSequence();
+  appEnableHighLevelCommander();
+  appInitLighthouse();
+
+  while(1) {
+    vTaskDelay(M2T(3000));
+    appRunLedSequence();
+    appRunHighLevelCommanderFlySquare();
+  }
+}

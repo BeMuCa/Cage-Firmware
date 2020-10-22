@@ -7,7 +7,7 @@
  *
  * Crazyflie control firmware
  *
- * Copyright (C) 2019 - 2020 Bitcraze AB
+ * Copyright (C) 2020 Bitcraze AB
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,29 +21,32 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
+ *
+ * app_ledseq.c - ledseq example
  */
 
-#pragma once
 
-#define SPEED_OF_LIGHT (299792458.0)
-#define GRAVITY_MAGNITUDE (9.81f)
+#include "ledseq.h"
 
-#ifndef M_PI
-  #define M_PI   3.14159265358979323846
-#endif
+// Define the sequence in static memory, not on the stack
+static ledseqStep_t mySeq[] = {
+  { true, LEDSEQ_WAITMS(50)},
+  {false, LEDSEQ_WAITMS(50)},
+  { true, LEDSEQ_WAITMS(50)},
+  {false, LEDSEQ_WAITMS(50)},
+  {false, LEDSEQ_STOP},
+};
 
-#ifndef M_PI_F
-  #define M_PI_F   (3.14159265358979323846f)
-#endif
+// Define a contex for the sequence in static memory, not on the stack
+static ledseqContext_t context = {
+  .sequence = mySeq,
+  .led = LED_GREEN_R
+};
 
-#ifndef M_1_PI_F
-  #define M_1_PI_F (0.31830988618379067154f)
-#endif
+void appRegisterLedSequence() {
+  ledseqRegisterSequence(&context);
+}
 
-#ifndef M_PI_2_F
-  #define M_PI_2_F (1.57079632679f)
-#endif
-
-#ifndef CF_MASS
-  #define CF_MASS (27.0f)
-#endif
+void appRunLedSequence() {
+  ledseqRun(&context);
+}
