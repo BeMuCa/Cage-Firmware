@@ -2,7 +2,7 @@
 PLATFORM=CF2
 
 ## Weight of the Crazyflie, including decks. The default setting is a Crazyflie 2.X without decks.
-# CFLAGS += -DCF_MASS=27.0f
+# CFLAGS += -DCF_MASS=0.027f // in kg
 
 ## Force device type string
 # CFLAGS += -DDEVICE_TYPE_STRING_FORCE="CF20"
