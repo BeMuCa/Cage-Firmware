@@ -7,7 +7,7 @@
  *
  * Crazyflie control firmware
  *
- * Copyright (C) 2020 Bitcraze AB
+ * Copyright (C) 2019 - 2020 Bitcraze AB
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,9 +22,17 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  *
- * app_lighthouse.h - lighthouse example
+ * kve_common.h - Common type definition for kve
+ *
  */
 
 #pragma once
 
-void appInitLighthouse();
+#include <stddef.h>
+
+typedef struct {
+    size_t memorySize;
+    size_t (*read)(size_t address, void* data, size_t length);
+    size_t (*write)(size_t address, const void* data, size_t length);
+    void (*flush)(void);
+} kveMemory_t;

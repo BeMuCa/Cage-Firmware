@@ -45,6 +45,9 @@ PLATFORM=CF2
 ## Set LED Rings to use less more LEDs (only if board is modified)
 # CFLAGS += -DLED_RING_NBR_LEDS=24
 
+## Do not send CRTP messages when parameter values are updated
+# CFLAGS += -DSILENT_PARAM_UPDATES
+
 ## Turn on monitoring of queue usages
 # CFLAGS += -DDEBUG_QUEUE_MONITOR
 

@@ -7,7 +7,7 @@
  *
  * Crazyflie control firmware
  *
- * Copyright (C) 2020 Bitcraze AB
+ * Copyright (C) 2019 - 2020 Bitcraze AB
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,38 +22,25 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  *
- * api_app.c - App layer application that ilustrates how to use functions in the API.
- *             This app may not be possible to run, the intention is to show how to
- *             use functions.
+ * kveStorage.h - Low level storage functions
+ *
  */
 
+#pragma once
 
-#include <string.h>
-#include <stdint.h>
+#include "kve/kve_common.h"
+
+#include <stddef.h>
 #include <stdbool.h>
 
-#include "app.h"
+void kveDefrag(kveMemory_t *kve);
 
-#include "FreeRTOS.h"
-#include "task.h"
+bool kveStore(kveMemory_t *kve, char* key, const void* buffer, size_t length);
 
-#include "debug.h"
+size_t kveFetch(kveMemory_t *kve, const char* key, void* buffer, size_t bufferLength);
 
-// Examples
-#include "app_ledseq.h"
-#include "app_high_level_commander.h"
-#include "app_lighthouse.h"
+bool kveDelete(kveMemory_t *kve, char* key);
 
-#define DEBUG_MODULE "APPAPI"
+void kveFormat(kveMemory_t *kve);
 
-void appMain() {
-  appRegisterLedSequence();
-  appEnableHighLevelCommander();
-  appInitLighthouse();
-
-  while(1) {
-    vTaskDelay(M2T(3000));
-    appRunLedSequence();
-    // appRunHighLevelCommanderFlySquare();
-  }
-}
+bool kveCheck(kveMemory_t *kve);

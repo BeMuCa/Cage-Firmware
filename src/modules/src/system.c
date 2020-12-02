@@ -43,6 +43,7 @@
 #include "config.h"
 #include "system.h"
 #include "platform.h"
+#include "storage.h"
 #include "configblock.h"
 #include "worker.h"
 #include "freeRTOSdebug.h"
@@ -67,6 +68,7 @@
 #include "app.h"
 #include "static_mem.h"
 #include "peer_localization.h"
+#include "cfassert.h"
 
 #ifndef START_DISARMED
 #define ARM_INIT true
@@ -127,6 +129,7 @@ void systemInit(void)
               *((int*)(MCU_ID_ADDRESS+0)), *((short*)(MCU_FLASH_SIZE_ADDRESS)));
 
   configblockInit();
+  storageInit();
   workerInit();
   adcInit();
   ledseqInit();
@@ -196,6 +199,7 @@ void systemTask(void *arg)
   //Test the modules
   pass &= systemTest();
   pass &= configblockTest();
+  pass &= storageTest();
   pass &= commTest();
   pass &= commanderTest();
   pass &= stabilizerTest();
@@ -204,6 +208,7 @@ void systemTask(void *arg)
   pass &= soundTest();
   pass &= memTest();
   pass &= watchdogNormalStartTest();
+  pass &= cfAssertNormalStartTest();
   pass &= peerLocalizationTest();
 
   //Start the firmware

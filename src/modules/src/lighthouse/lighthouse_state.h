@@ -7,7 +7,7 @@
  *
  * Crazyflie control firmware
  *
- * Copyright (C) 2020 Bitcraze AB
+ * Copyright (C) 2019 - 2020 Bitcraze AB
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,12 +22,11 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  *
- * app_ledseq.h - ledseq example
+ * lighthouse_state.h - storage for basestation state struct
  */
 
 #pragma once
 
-void appEnableHighLevelCommander();
-void appRunHighLevelCommanderFlySquare();
-void appDefineTrajectory();
-void appRunHighLevelCommanderFlyTrajectory();
+#include "pulse_processor.h"
+
+extern pulseProcessor_t lighthouseCoreState;
